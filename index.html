@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="قالب Google Sheets يكتب المبلغ بالحروف العربية تلقائيًا ويطبع سند القبض. Arabic receipt voucher template for Google Sheets.">
+<title>سند قبض بالتفقيط | Arabic Sheets Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: a single centered column, like a printed voucher book; the amount-in-words line set in Amiri is the hero. */
+:root {
+  --paper: #f6f7f4;
+  --card: #ffffff;
+  --ink: #1d2a25;
+  --muted: #5b6b64;
+  --green: #2f5e4e;
+  --green-soft: #e3ece7;
+  --line: #d6dfda;
+  --f-body: "Cairo", "Segoe UI", Tahoma, sans-serif;
+  --f-words: "Amiri", "Traditional Arabic", serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #121815; --card: #1a221e; --ink: #e6ede9; --muted: #9db0a7; --green: #7fc1a6; --green-soft: #213029; --line: #2c3a33; color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --paper: #121815; --card: #1a221e; --ink: #e6ede9; --muted: #9db0a7; --green: #7fc1a6; --green-soft: #213029; --line: #2c3a33; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.8; }
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 28px 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 40px; }
+header.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+header.top b { color: var(--ink); font-weight: 700; }
+h1, h2 { text-wrap: balance; line-height: 1.35; margin: 0; }
+h1 { font-size: clamp(30px, 6vw, 44px); font-weight: 800; color: var(--green); }
+h2 { font-size: 22px; font-weight: 700; }
+p { margin: 0; }
+.hero { display: grid; gap: 18px; }
+.lead { font-size: 18px; color: var(--muted); max-width: 60ch; }
+.example { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: grid; gap: 6px; }
+.example .num { font-variant-numeric: tabular-nums; font-weight: 700; direction: ltr; text-align: right; font-size: 20px; }
+.example .words { font-family: var(--f-words); font-size: clamp(20px, 3.6vw, 26px); line-height: 1.7; }
+.example small { color: var(--muted); font-size: 13px; }
+.buy { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.price { font-size: 28px; font-weight: 800; }
+.price span { font-size: 14px; font-weight: 600; color: var(--muted); }
+.btn { display: inline-block; background: var(--green); color: var(--card); text-decoration: none; font-weight: 700; padding: 10px 22px; border-radius: 8px; }
+.btn:focus-visible, a:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+figure { margin: 0; display: grid; gap: 8px; }
+.ltr { direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; }
+.v { background: var(--card); border: 2px solid var(--green); border-radius: 6px; padding: 20px; display: grid; gap: 10px; }
+.v-org { text-align: center; display: grid; } .v-org b { font-size: 20px; } .v-org span { font-size: 13px; color: var(--muted); }
+.v-title { background: var(--green); color: var(--card); text-align: center; font-size: 22px; font-weight: 800; border-radius: 3px; padding: 4px; display: grid; }
+.v-title small { font-size: 11px; font-weight: 400; }
+.v-row { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.v-row span { color: var(--muted); font-size: 14px; }
+.v-amt { border: 1.5px solid var(--green); padding: 0 12px; border-radius: 3px; }
+.v-words { font-family: var(--f-words); font-size: clamp(18px, 3.4vw, 22px); background: var(--green-soft); padding: 6px 10px; border-radius: 3px; }
+.v-sign { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; padding-top: 18px; }
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14px; background: var(--card); }
+th { background: var(--green); color: var(--card); font-weight: 700; padding: 6px 10px; text-align: start; white-space: nowrap; }
+td { padding: 6px 10px; border-top: 1px solid var(--line); }
+td.ltr { white-space: nowrap; }
+td:last-child { font-family: var(--f-words); font-size: 15px; }
+figure img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+figcaption { font-size: 14px; color: var(--muted); }
+.shots { display: grid; gap: 24px; }
+section { display: grid; gap: 14px; }
+ul, ol { margin: 0; padding-inline-start: 22px; display: grid; gap: 6px; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+.cols > div { min-width: 0; display: grid; gap: 10px; align-content: start; }
+.cur { display: flex; flex-wrap: wrap; gap: 8px; }
+.cur span { background: var(--green-soft); border-radius: 6px; padding: 2px 10px; font-size: 14px; }
+.policies { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 16px; }
+.policies h3 { margin: 0; font-size: 16px; }
+.policies p { color: var(--muted); }
+.mail { direction: ltr; unicode-bidi: isolate; font-weight: 700; user-select: all; }
+.en { direction: ltr; text-align: left; font-family: "Segoe UI", system-ui, sans-serif; border-top: 1px solid var(--line); padding-top: 24px; display: grid; gap: 10px; color: var(--muted); font-size: 15px; }
+.en h2 { color: var(--ink); font-size: 18px; }
+footer { font-size: 13px; color: var(--muted); }
+</style>
+
+<style>body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+<div class="wrap" dir="rtl" lang="ar">
+  <header class="top">
+    <b>Arabic Sheets Tools</b>
+    <span>قوالب Google Sheets عربية للأعمال الصغيرة</span>
+  </header>
+
+  <section class="hero">
+    <h1>سند قبض بالتفقيط</h1>
+    <p class="lead">قالب Google Sheets تكتب فيه المبلغ رقمًا، فيظهر مكتوبًا بالحروف العربية الصحيحة مع العملة وجزئها، ثم تطبع السند جاهزًا.</p>
+    <div class="example">
+      <small>تكتب في خانة المبلغ:</small>
+      <div class="num">1,250.500 JOD</div>
+      <small>فيظهر تلقائيًا:</small>
+      <div class="words">فقط ألف ومئتان وخمسون دينارًا أردنيًا وخمسمئة فلس لا غير</div>
+    </div>
+    <div class="buy">
+      <div class="price">9 دولارات <span>دفعة واحدة، بلا اشتراك</span></div>
+      <a class="btn" href="https://arabicsheetstools.lemonsqueezy.com/checkout/buy/d6710f0e-ead0-42ce-999e-cf7e37fcc7b3">اشترِ القالب</a>
+    </div>
+  </section>
+
+  <div class="shots">
+    <figure>
+      <div class="v" role="img" aria-label="نموذج من ورقة السند للطباعة">
+        <div class="v-org"><b>مؤسسة المثال التجارية</b><span>عمّان، شارع المثال، مبنى 10</span></div>
+        <div class="v-title">سند قبض<small>Receipt Voucher</small></div>
+        <div class="v-row"><span>رقم السند:</span><b class="ltr">RV-0001</b><span>التاريخ:</span><b class="ltr">01/11/2026</b></div>
+        <div class="v-row"><span>استلمنا من:</span><b>شركة النور للتجارة</b></div>
+        <div class="v-row"><span>مبلغًا وقدره:</span><b class="v-amt ltr">1,250.500 JOD</b></div>
+        <div class="v-words">فقط ألف ومئتان وخمسون دينارًا أردنيًا وخمسمئة فلس لا غير</div>
+        <div class="v-row"><span>وذلك عن:</span><b>دفعة من قيمة فاتورة رقم 341</b></div>
+        <div class="v-sign"><span>المستلم</span><span>المحاسب</span><span>المدير</span></div>
+      </div>
+      <figcaption>مثال من ورقة «سند للطباعة»: تختار رقم السند فيظهر كاملًا، ثم ملف ← طباعة.</figcaption>
+    </figure>
+    <figure>
+      <div class="tbl"><table>
+        <thead><tr><th>رقم السند</th><th>التاريخ</th><th>استلمنا من</th><th>المبلغ</th><th>العملة</th><th>المبلغ بالحروف</th></tr></thead>
+        <tbody>
+          <tr><td class="ltr">RV-0001</td><td class="ltr">01/11/2026</td><td>شركة النور للتجارة</td><td class="ltr">1,250.500</td><td>JOD</td><td>فقط ألف ومئتان وخمسون دينارًا أردنيًا وخمسمئة فلس لا غير</td></tr>
+          <tr><td class="ltr">RV-0002</td><td class="ltr">04/11/2026</td><td>أحمد محمود</td><td class="ltr">300.000</td><td>JOD</td><td>فقط ثلاثمئة دينار أردني لا غير</td></tr>
+          <tr><td class="ltr">RV-0003</td><td class="ltr">09/11/2026</td><td>مؤسسة الريان</td><td class="ltr">2,011.25</td><td>SAR</td><td>فقط ألفان وأحد عشر ريالًا سعوديًا وخمس وعشرون هللةً لا غير</td></tr>
+        </tbody>
+      </table></div>
+      <figcaption>مثال من ورقة «السجل»: سند في كل صف، والرقم والمبلغ بالحروف يُملآن وحدهما.</figcaption>
+    </figure>
+  </div>
+
+  <div class="cols">
+    <div>
+      <h2>ما في القالب</h2>
+      <ul>
+        <li>سجلّ يتّسع لـ200 سند، برقم تلقائي (RV-0001).</li>
+        <li>سند جاهز للطباعة على A4 أو A5، فيه ثلاث خانات توقيع.</li>
+        <li>طريقة الدفع لكل سند، ومع الشيك رقمه وبنكه وتاريخ استحقاقه.</li>
+        <li>إعدادات لاسم منشأتك وعنوانها ورقمها الضريبي وعملتها الافتراضية.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>العملات</h2>
+      <p>تسع عملات، كل منها بجزئها وصفتها، مع ضبط التمييز والتأنيث («ثلاث هللات»، «أحد عشر دينارًا»):</p>
+      <div class="cur">
+        <span>دينار أردني</span><span>ريال سعودي</span><span>درهم إماراتي</span><span>دينار كويتي</span><span>دينار بحريني</span><span>ريال عماني</span><span>ريال قطري</span><span>جنيه مصري</span><span>دولار أمريكي</span>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <h2>كيف تحصل عليه</h2>
+    <ol>
+      <li>تدفع 9 دولارات من صفحة الدفع الآمنة (Lemon Squeezy).</li>
+      <li>يصلك فورًا ملف PDF فيه رابط القالب وخطوات البدء، والرابط نفسه في صفحة التأكيد وفي البريد. تفتحه وأنت مسجّل في Google، ثم تختار «إنشاء نسخة».</li>
+      <li>تكتب اسم منشأتك في ورقة «الإعدادات»، وتبدأ.</li>
+    </ol>
+    <p>لا يحتاج إلا حساب Google. القالب يعمل في Google Sheets، ولا يعمل التفقيط إذا نُزّل الملف بصيغة Excel.</p>
+  </section>
+
+  <section class="policies">
+    <div>
+      <h3>الاسترداد</h3>
+      <p>تسترد المبلغ كاملًا خلال 14 يومًا من الشراء دون أن تُسأل عن السبب. راسلنا برقم الطلب على البريد أدناه.</p>
+    </div>
+    <div>
+      <h3>الترخيص</h3>
+      <p>تستعمل القالب لمنشأتك أو عملك، بعدد النسخ الذي تحتاجه داخلها. لا يُسمح بإعادة بيعه أو نشره.</p>
+    </div>
+    <div>
+      <h3>الخصوصية</h3>
+      <p>نسختك من القالب تكون في حسابك على Google Drive، ولا تصلنا بياناتها. القالب لا يطلب أي صلاحيات. الدفع وبيانات الشراء تعالجها Lemon Squeezy بصفتها البائع المسجّل.</p>
+    </div>
+    <div>
+      <h3>التواصل والدعم</h3>
+      <p>للأسئلة والدعم: <span class="mail">abdullahzuher123@gmail.com</span></p>
+    </div>
+    <div>
+      <h3>البائع</h3>
+      <p>عبدالله أبو سمرة (Abdullah Abu Samra)، عمّان، الأردن.</p>
+    </div>
+  </section>
+
+  <section class="en">
+    <h2>Arabic Receipt Voucher Template for Google Sheets</h2>
+    <p>A Google Sheets template for small businesses and freelancers in the Arab world. You type an amount, and the template writes it in correct Arabic words (tafqeet) with the currency and its subunit, then prints a receipt voucher. It includes a 200-row receipt log, a printable voucher, settings for the business name and default currency, and nine currencies (JOD, SAR, AED, KWD, BHD, OMR, QAR, EGP, USD).</p>
+    <p>Price: US$9, one-time payment through Lemon Squeezy checkout. After purchase the customer receives a link to copy the template into their own Google Drive. Refunds within 14 days. The template asks for no permissions and sends no data to us.</p>
+    <p>Seller: Abdullah Abu Samra, Amman, Jordan. Contact: <span class="mail">abdullahzuher123@gmail.com</span></p>
+    <h2>Refund policy</h2>
+    <p>Full refund within 14 days of purchase, no questions asked. Email us with your order number.</p>
+    <h2>Terms of use</h2>
+    <p>Each purchase gives a license to use the template inside the buyer's own business or organization, with as many copies as that business needs. Reselling or redistributing the template is not allowed. The template is provided as is; check printed receipts before giving them to customers. It does not replace any mandatory e-invoicing system.</p>
+    <h2>Privacy</h2>
+    <p>The template runs in the buyer's own Google Drive and asks for no permissions; we do not receive any data entered into it. Payments and order details are processed by Lemon Squeezy, the merchant of record. We use the buyer's email only to answer support requests and process refunds.</p>
+  </section>
+
+  <footer>Arabic Sheets Tools · سند قبض بالتفقيط، الإصدار 1.2</footer>
+</div>
+
+</body>
+</html>

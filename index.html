@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="قالب Google Sheets يكتب المبلغ بالحروف العربية تلقائيًا ويطبع سند القبض. Arabic receipt voucher template for Google Sheets.">
-<title>سند قبض بالتفقيط | Arabic Sheets Tools</title>
+<title>Arabic Sheets Tools | قوالب التفقيط لـ Google Sheets</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap">
 <style>
@@ -47,6 +47,13 @@ p { margin: 0; }
 .btn { display: inline-block; background: var(--green); color: var(--card); text-decoration: none; font-weight: 700; padding: 10px 22px; border-radius: 8px; }
 .btn:focus-visible, a:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
 figure { margin: 0; display: grid; gap: 8px; }
+.prods { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.prods a { display: grid; gap: 2px; text-decoration: none; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; }
+.prods a span { color: var(--muted); font-size: 14px; }
+.prods a:hover { border-color: var(--green); }
+.prod { border-top: 2px solid var(--green); padding-top: 28px; }
+.ph { font-size: clamp(24px, 4.5vw, 32px); color: var(--green); font-weight: 800; }
+.warn { font-size: 14px; color: var(--muted); background: var(--green-soft); border-radius: 6px; padding: 10px 12px; }
 .ltr { direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; }
 .v { background: var(--card); border: 2px solid var(--green); border-radius: 6px; padding: 20px; display: grid; gap: 10px; }
 .v-org { text-align: center; display: grid; } .v-org b { font-size: 20px; } .v-org span { font-size: 13px; color: var(--muted); }
@@ -90,7 +97,13 @@ footer { font-size: 13px; color: var(--muted); }
     <span>قوالب Google Sheets عربية للأعمال الصغيرة</span>
   </header>
 
-  <section class="hero">
+  <nav class="prods" aria-label="المنتجات">
+    <a href="#saned"><b>سند قبض بالتفقيط</b><span>9 دولارات</span></a>
+    <a href="#fatura"><b>عرض سعر وفاتورة بالتفقيط</b><span>12 دولارًا</span></a>
+    <a href="#hizma"><b>حزمة القالبين</b><span>15 دولارًا بدل 21</span></a>
+  </nav>
+
+  <section class="hero" id="saned">
     <h1>سند قبض بالتفقيط</h1>
     <p class="lead">قالب Google Sheets تكتب فيه المبلغ رقمًا، فيظهر مكتوبًا بالحروف العربية الصحيحة مع العملة وجزئها، ثم تطبع السند جاهزًا.</p>
     <div class="example">
@@ -161,6 +174,38 @@ footer { font-size: 13px; color: var(--muted); }
     <p>لا يحتاج إلا حساب Google. القالب يعمل في Google Sheets، ولا يعمل التفقيط إذا نُزّل الملف بصيغة Excel.</p>
   </section>
 
+  <section class="prod" id="fatura">
+    <h2 class="ph">عرض سعر وفاتورة بالتفقيط</h2>
+    <p class="lead">قالب Google Sheets للمستقلين والمنشآت الصغيرة: تكتب البنود فيُحسب المجموع والضريبة، ويُكتب الإجمالي بالحروف، ثم تطبع الفاتورة أو عرض السعر.</p>
+    <div class="example">
+      <small>مثال من القالب: إجمالي فاتورة</small>
+      <div class="num">768.500 JOD</div>
+      <div class="words">فقط سبعمئة وثمانية وستون دينارًا أردنيًا وخمسمئة فلس لا غير</div>
+    </div>
+    <ul>
+      <li>ثلاثة أنواع مستندات: فاتورة، وعرض سعر يُطبع بتاريخ صلاحيته، وفاتورة مبدئية.</li>
+      <li>ورقة عملاء: تكتب العميل مرة واحدة، ثم تختاره من قائمة.</li>
+      <li>بنود لكل مستند، والمجموع والخصم والضريبة والإجمالي بالحروف تُحسب وحدها.</li>
+      <li>متابعة المدفوع والمتبقي وتاريخ الاستحقاق، وحالة تُحسب وحدها: غير مدفوعة، أو مدفوعة جزئيًا، أو مدفوعة، أو متأخرة.</li>
+      <li>ورقة «الملخص»: المفوتر والمحصّل والمتبقي لكل شهر.</li>
+      <li>نسخة للطباعة بعنوان يتغير بحسب نوع المستند، والعملات التسع نفسها.</li>
+    </ul>
+    <p class="warn">القالب لا يُصدر فاتورة ضريبية إلكترونية معتمدة. إن كانت منشأتك ملزمة بنظام فوترة إلكترونية حكومي فاستخدمه، واستخدم القالب لعروض الأسعار والفواتير المبدئية والمستندات غير الضريبية.</p>
+    <div class="buy">
+      <div class="price">12 دولارًا <span>دفعة واحدة، بلا اشتراك</span></div>
+      <a class="btn" href="https://arabicsheetstools.lemonsqueezy.com/checkout/buy/a88ed516-f6da-418b-89fa-648eaa96a9b5">اشترِ القالب</a>
+    </div>
+  </section>
+
+  <section class="prod" id="hizma">
+    <h2 class="ph">حزمة التفقيط: القالبان معًا</h2>
+    <p class="lead">سند القبض وعرض السعر والفاتورة في طلب واحد، بـ15 دولارًا بدل 21. يصلك بعد الشراء ملف PDF فيه رابطا القالبين.</p>
+    <div class="buy">
+      <div class="price">15 دولارًا <span>بدل 21، دفعة واحدة</span></div>
+      <a class="btn" href="https://arabicsheetstools.lemonsqueezy.com/checkout/buy/6d4e73c3-0ff2-4650-b170-64727e78b0d0">اشترِ الحزمة</a>
+    </div>
+  </section>
+
   <section class="policies">
     <div>
       <h3>الاسترداد</h3>
@@ -168,11 +213,11 @@ footer { font-size: 13px; color: var(--muted); }
     </div>
     <div>
       <h3>الترخيص</h3>
-      <p>تستعمل القالب لمنشأتك أو عملك، بعدد النسخ الذي تحتاجه داخلها. لا يُسمح بإعادة بيعه أو نشره.</p>
+      <p>تستعمل القالب الذي اشتريته لمنشأتك أو عملك، بعدد النسخ الذي تحتاجه داخلها. لا يُسمح بإعادة بيعه أو نشره.</p>
     </div>
     <div>
       <h3>الخصوصية</h3>
-      <p>نسختك من القالب تكون في حسابك على Google Drive، ولا تصلنا بياناتها. القالب لا يطلب أي صلاحيات. الدفع وبيانات الشراء تعالجها Lemon Squeezy بصفتها البائع المسجّل.</p>
+      <p>نسختك من القالب تكون في حسابك على Google Drive، ولا تصلنا بياناتها. القوالب لا تطلب أي صلاحيات. الدفع وبيانات الشراء تعالجها Lemon Squeezy بصفتها البائع المسجّل.</p>
     </div>
     <div>
       <h3>التواصل والدعم</h3>
@@ -185,19 +230,23 @@ footer { font-size: 13px; color: var(--muted); }
   </section>
 
   <section class="en">
-    <h2>Arabic Receipt Voucher Template for Google Sheets</h2>
+    <h2>Arabic Sheets Tools: Arabic templates for Google Sheets</h2>
+    <p>Products: Arabic Receipt Voucher template (US$9), Arabic Quotation and Invoice template (US$12), and a bundle of both (US$15). All are one-time payments through Lemon Squeezy checkout, and each purchase includes a PDF with the link to copy the template into the buyer's own Google Drive.</p>
+    <h2>Arabic Receipt Voucher Template</h2>
     <p>A Google Sheets template for small businesses and freelancers in the Arab world. You type an amount, and the template writes it in correct Arabic words (tafqeet) with the currency and its subunit, then prints a receipt voucher. It includes a 200-row receipt log, a printable voucher, settings for the business name and default currency, and nine currencies (JOD, SAR, AED, KWD, BHD, OMR, QAR, EGP, USD).</p>
     <p>Price: US$9, one-time payment through Lemon Squeezy checkout. After purchase the customer receives a link to copy the template into their own Google Drive. Refunds within 14 days. The template asks for no permissions and sends no data to us.</p>
+    <h2>Arabic Quotation and Invoice Template</h2>
+    <p>Quotations, invoices and proforma invoices with line items, discount and tax, the total written in Arabic words, a customer list, paid and outstanding amounts with due dates, and a monthly summary. It does not issue certified tax e-invoices. Price: US$12, one-time payment.</p>
     <p>Seller: Abdallah Abusamra, Amman, Jordan. Contact: <span class="mail">abdullahzuher123@gmail.com</span></p>
     <h2>Refund policy</h2>
     <p>Full refund within 14 days of purchase, no questions asked. Email us with your order number.</p>
     <h2>Terms of use</h2>
-    <p>Each purchase gives a license to use the template inside the buyer's own business or organization, with as many copies as that business needs. Reselling or redistributing the template is not allowed. The template is provided as is; check printed receipts before giving them to customers. It does not replace any mandatory e-invoicing system.</p>
+    <p>Each purchase gives a license to use the purchased template inside the buyer's own business or organization, with as many copies as that business needs. Reselling or redistributing the template is not allowed. The template is provided as is; check printed receipts before giving them to customers. It does not replace any mandatory e-invoicing system.</p>
     <h2>Privacy</h2>
-    <p>The template runs in the buyer's own Google Drive and asks for no permissions; we do not receive any data entered into it. Payments and order details are processed by Lemon Squeezy, the merchant of record. We use the buyer's email only to answer support requests and process refunds.</p>
+    <p>The templates run in the buyer's own Google Drive and ask for no permissions; we do not receive any data entered into it. Payments and order details are processed by Lemon Squeezy, the merchant of record. We use the buyer's email only to answer support requests and process refunds.</p>
   </section>
 
-  <footer>Arabic Sheets Tools · سند قبض بالتفقيط، الإصدار 1.2</footer>
+  <footer>Arabic Sheets Tools · سند قبض بالتفقيط (الإصدار 1.2) · عرض سعر وفاتورة بالتفقيط (الإصدار 2.0)</footer>
 </div>
 
 </body>
